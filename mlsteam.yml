@@ -1,0 +1,31 @@
+command: ipython3 entry.ipynb
+params:
+  learning_rate: 0.1
+  momentum: 0.9
+  network:
+  - MobileNet
+  num_epochs:
+  - 5
+  test_batch_size: 100
+  test_worker: 2
+  train_batch_size: 128
+  train_worker: 2
+  weight_decay: 0.0005
+  checkpoint_path: 'checkpoint.pth'
+params_definition:
+  network:
+    options:
+    - ResNet18
+    - PreActResNet18
+    - GoogLeNet
+    - DenseNet121
+    - ResNeXt29_2x64d
+    - MobileNet
+    - MobileNetV2
+    - DPN92
+    - ShuffleNetG2
+    - SENet18
+    - ShuffleNetV2
+    - EfficientNetB0
+    - RegNetX_200MF
+
