@@ -79,8 +79,6 @@ start_epoch = checkpoint['epoch']
 criterion = nn.CrossEntropyLoss()
 
 def test():
-    global best_acc
-    net.eval()
     test_loss = 0
     correct = 0
     total = 0
@@ -111,11 +109,11 @@ def each_acc():
             for i in range(8):
                 label = labels[i]
                 class_correct[label] += c[i].item()
-            class_total[label] += 1
+                class_total[label] += 1
 
     print("=============\nEach accuracy:")
     for i in range(10):
-        print('Accuracy of %5s : %2.1f %%' % (classes[i], 10 * class_correct[i] / class_total[i]))
+        print('Accuracy of %5s : %2.1f %%' % (classes[i], 100 * class_correct[i] / class_total[i]))
 
 def info():
     print('====================')
