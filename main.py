@@ -40,12 +40,12 @@ transform_test = transforms.Compose([
 ])
 
 trainset = torchvision.datasets.CIFAR10(
-    root='/mlsteam/input', train=True, download=True, transform=transform_train)
+    root='/mlsteam/data', train=True, download=True, transform=transform_train)
 trainloader = torch.utils.data.DataLoader(
     trainset, batch_size=128, shuffle=True, num_workers=2)
 
 testset = torchvision.datasets.CIFAR10(
-    root='/mlsteam/input', train=False, download=True, transform=transform_test)
+    root='/mlsteam/data', train=False, download=True, transform=transform_test)
 testloader = torch.utils.data.DataLoader(
     testset, batch_size=100, shuffle=False, num_workers=2)
 
@@ -76,8 +76,8 @@ if device == 'cuda':
 if args.resume:
     # Load checkpoint.
     print('==> Resuming from checkpoint..')
-    assert os.path.isdir('/mlsteam/input/checkpoint'), 'Error: no checkpoint directory found!'
-    checkpoint = torch.load('/mlsteam/input/checkpoint/ckpt.pth')
+    assert os.path.isdir('/mlsteam/data/checkpoint'), 'Error: no checkpoint directory found!'
+    checkpoint = torch.load('/mlsteam/data/checkpoint/ckpt.pth')
     net.load_state_dict(checkpoint['net'])
     best_acc = checkpoint['acc']
     start_epoch = checkpoint['epoch']
@@ -140,9 +140,9 @@ def test(epoch):
             'acc': acc,
             'epoch': epoch,
         }
-        if not os.path.isdir('/mlsteam/input/checkpoint'):
-            os.mkdir('/mlsteam/input/checkpoint')
-        torch.save(state, '/mlsteam/input/checkpoint/ckpt.pth')
+        if not os.path.isdir('/mlsteam/data/checkpoint'):
+            os.mkdir('/mlsteam/data/checkpoint')
+        torch.save(state, '/mlsteam/data/checkpoint/ckpt.pth')
         best_acc = acc
 
 

@@ -53,7 +53,7 @@ transform_test = transforms.Compose([
 ])
 
 testset = torchvision.datasets.CIFAR10(
-    root='/mlsteam/input/cifar10', train=False, download=False, transform=transform_test)
+    root='/mlsteam/data/cifar10', train=False, download=False, transform=transform_test)
 testloader = torch.utils.data.DataLoader(
     testset, batch_size=test_bs, shuffle=False, num_workers=test_worker)
 

@@ -57,7 +57,7 @@ transform_test = transforms.Compose([
 
 
 trainset = torchvision.datasets.CIFAR10(
-    root='/mlsteam/input/cifar10', train=True, download=False, transform=transform_train)
+    root='/mlsteam/data/cifar10', train=True, download=False, transform=transform_train)
 
 # Hyperparameter example
 train_bs = stparams.get_value("train_batch_size", 128)
@@ -68,7 +68,7 @@ trainloader = torch.utils.data.DataLoader(
 #     trainset, batch_size=128, shuffle=True, num_workers=2)
 
 testset = torchvision.datasets.CIFAR10(
-    root='/mlsteam/input/cifar10', train=False, download=False, transform=transform_test)
+    root='/mlsteam/data/cifar10', train=False, download=False, transform=transform_test)
 testloader = torch.utils.data.DataLoader(
     testset, batch_size=test_bs, shuffle=False, num_workers=test_worker)
 
