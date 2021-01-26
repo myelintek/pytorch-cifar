@@ -1,31 +1,78 @@
-# Train CIFAR10 with PyTorch
+# PyTorch models trained on CIFAR-10 dataset
+- I modified [TorchVision](https://pytorch.org/docs/stable/torchvision/models.html) official implementation of popular CNN models, and trained those on CIFAR-10 dataset.
+- I changed *number of class, filter size, stride, and padding* in the the original code so that it works with CIFAR-10.
+- I also share the **weights** of these models, so you can just load the weights and use them.
+- The code is highly re-producible and readable by using PyTorch-Lightning.
 
-I'm playing with [PyTorch](http://pytorch.org/) on the CIFAR10 dataset.
+## Statistics of supported models
+| No. |     Model    | Val. Acc. | No. Params |   Size |
+|:---:|:-------------|----------:|-----------:|-------:|
+| 1   | vgg11_bn     |   92.39%  |   28.150 M | 108 MB |
+| 2   | vgg13_bn     |   94.22%  |   28.334 M | 109 MB |
+| 3   | vgg16_bn     |   94.00%  |   33.647 M | 129 MB |
+| 4   | vgg19_bn     |   93.95%  |   38.959 M | 149 MB |
+| 5   | resnet18     |   93.07%  |   11.174 M |  43 MB |
+| 6   | resnet34     |   93.34%  |   21.282 M |  82 MB |
+| 7   | resnet50     |   93.65%  |   23.521 M |  91 MB |
+| 8   | densenet121  |   94.06%  |    6.956 M |  28 MB |
+| 9   | densenet161  |   94.07%  |   26.483 M | 103 MB |
+| 10  | densenet169  |   94.05%  |   12.493 M |  49 MB |
+| 11  | mobilenet_v2 |   93.91%  |    2.237 M |   9 MB |
+| 12  | googlenet    |   92.85%  |    5.491 M |  22 MB |
+| 13  | inception_v3 |   93.74%  |   21.640 M |  83 MB |
 
-## Prerequisites
-- Python 3.6+
-- PyTorch 1.0+
+## Details report
+Weight and Biases' details report for this project [WandB Report](https://wandb.ai/huyvnphan/cifar10/reports/CIFAR10-Classification-using-PyTorch---VmlldzozOTg0ODQ?accessToken=9m2q1ajhppuziprsq9tlryynvmqbkrbvjdoktrz7o6gtqilmtqbv2r9jjrtb2tqq)
 
-## Accuracy
-| Model             | Acc.        |
-| ----------------- | ----------- |
-| [VGG16](https://arxiv.org/abs/1409.1556)              | 92.64%      |
-| [ResNet18](https://arxiv.org/abs/1512.03385)          | 93.02%      |
-| [ResNet50](https://arxiv.org/abs/1512.03385)          | 93.62%      |
-| [ResNet101](https://arxiv.org/abs/1512.03385)         | 93.75%      |
-| [RegNetX_200MF](https://arxiv.org/abs/2003.13678)     | 94.24%      |
-| [RegNetY_400MF](https://arxiv.org/abs/2003.13678)     | 94.29%      |
-| [MobileNetV2](https://arxiv.org/abs/1801.04381)       | 94.43%      |
-| [ResNeXt29(32x4d)](https://arxiv.org/abs/1611.05431)  | 94.73%      |
-| [ResNeXt29(2x64d)](https://arxiv.org/abs/1611.05431)  | 94.82%      |
-| [DenseNet121](https://arxiv.org/abs/1608.06993)       | 95.04%      |
-| [PreActResNet18](https://arxiv.org/abs/1603.05027)    | 95.11%      |
-| [DPN92](https://arxiv.org/abs/1707.01629)             | 95.16%      |
+## How To Cite
+[![DOI](https://zenodo.org/badge/195914773.svg)](https://zenodo.org/badge/latestdoi/195914773)
 
-## Learning rate adjustment
-I manually change the `lr` during training:
-- `0.1` for epoch `[0,150)`
-- `0.01` for epoch `[150,250)`
-- `0.001` for epoch `[250,350)`
+## How to use pretrained models
 
-Resume the training with `python main.py --resume --lr=0.01`
+**Automatically download and extract the weights from Box (933 MB)**
+```python
+python train.py --download_weights 1
+```
+Or use [Google Drive](https://drive.google.com/file/d/17fmN8eQdLpq2jIMQ_X0IXDPXfI9oVWgq/view?usp=sharing) backup link (you have to download and extract manually)
+
+**Load model and run**
+```python
+from cifar10_models.vgg import vgg11_bn, vgg13_bn, vgg16_bn, vgg19_bn
+
+# Untrained model
+my_model = vgg11_bn()
+
+# Pretrained model
+my_model = vgg11_bn(pretrained=True)
+my_model.eval() # for evaluation
+```
+
+If you use your own images, all models expect data to be in range [0, 1] then normalized by
+```python
+mean = [0.4914, 0.4822, 0.4465]
+std = [0.2023, 0.1994, 0.2010]
+```
+
+## How to train models from scratch
+Check the `train.py` to see all available hyper-parameter choices.
+To reproduce the same accuracy use the default hyper-parameters
+
+`python train.py --classifier resnet18`
+
+## How to test pretrained models
+`python train.py --test_phase 1 --pretrained 1 --classifier resnet18`
+
+Output
+
+`{'acc/test': tensor(93.0689, device='cuda:0')}`
+
+
+## Requirements
+**Just to use pretrained models**
+- pytorch = 1.7.0
+
+**To train & test**
+- pytorch = 1.7.0
+- torchvision = 0.7.0
+- tensorboard = 2.2.1
+- pytorch-lightning = 1.1.0

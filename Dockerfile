@@ -27,7 +27,7 @@ ADD src /mlsteam/lab
 ADD bash.bashrc /etc/bash.bashrc
 
 # for sh
-RUN if [ $VERSION = "dev" ]; then cd /mlsteam/lab && python trainer.py --num_epochs=1 --download=1; fi
+RUN if [ $VERSION = "dev" ]; then cd /mlsteam/lab && python train.py --max_epochs=1; fi
 
 RUN rm -rf /usr/lib/x86_64-linux-gnu/libcuda.so /usr/lib/x86_64-linux-gnu/libcuda.so.1 /tmp/*
 
