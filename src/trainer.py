@@ -1,4 +1,5 @@
 '''Train CIFAR10 with PyTorch.'''
+import argparse
 import torch
 import torch.nn as nn
 import torch.optim as optim
@@ -29,16 +30,21 @@ network_map = {
     'RegNetX_200MF': RegNetX_200MF
 }
 
+parser = argparse.ArgumentParser(description='Train cifar10 dataset in Pytorch')
+parser.add_argument('--num_epochs', type=int, default=200, required=False, help='train epochs')
+parser.add_argument('--download', type=int, default=0, required=False, help='download dataset')
+args = parser.parse_args()
 
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 best_acc = 0  # best test accuracy
 learning_rate = stparams.get_value("learning_rate", 0.1)
 momentum = stparams.get_value("momentum", 0.9)
 weight_decay = stparams.get_value("weight_decay", 5e-4)
-num_epochs = stparams.get_value("num_epochs", 200)
+num_epochs = stparams.get_value("num_epochs", args.num_epochs)
 network = stparams.get_value("network", 'RegNetX_200MF')
 test_bs = stparams.get_value("test_batch_size", 100)
 test_worker = stparams.get_value("test_worker", 2)
+dl_dataset = True if args.download else False
 
 
 # Data
@@ -57,7 +63,7 @@ transform_test = transforms.Compose([
 
 
 trainset = torchvision.datasets.CIFAR10(
-    root='/mlsteam/data/cifar10', train=True, download=False, transform=transform_train)
+    root='/mlsteam/data/cifar10', train=True, download=dl_dataset, transform=transform_train)
 
 # Hyperparameter example
 train_bs = stparams.get_value("train_batch_size", 128)
@@ -68,7 +74,7 @@ trainloader = torch.utils.data.DataLoader(
 #     trainset, batch_size=128, shuffle=True, num_workers=2)
 
 testset = torchvision.datasets.CIFAR10(
-    root='/mlsteam/data/cifar10', train=False, download=False, transform=transform_test)
+    root='/mlsteam/data/cifar10', train=False, download=dl_dataset, transform=transform_test)
 testloader = torch.utils.data.DataLoader(
     testset, batch_size=test_bs, shuffle=False, num_workers=test_worker)
 
