@@ -1,0 +1,15 @@
+command: python train.py
+params:
+  network:
+  - resnet18
+  num_epochs:
+  - 5
+params_definition:
+  network:
+    options:
+    - mobilenet_v2
+    - inception_v3
+    - googlenet
+    - resnet18
+    - vgg11_bn
+
